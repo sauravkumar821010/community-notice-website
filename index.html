@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register & Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Tailwind CSS CDN for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for a clean look */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Ensure smooth transitions for all properties */
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Basic styling for the containers to center them */
+        .container {
+            /* More pronounced shadow and rounded corners */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
+            border-radius: 1.25rem; /* More rounded */
+            background-color: white; /* Default light background */
+            transition: all 0.5s ease-in-out; /* Smooth transition for display changes and theme */
+            /* Add a subtle animation on load or focus */
+            animation: fadeInScale 0.6s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Ensure the form containers are centered and have max-width */
+        #signup, #signIn {
+            max-width: 450px; /* Slightly wider for better balance */
+            margin: auto; /* Center horizontally */
+            padding: 2.5rem; /* Increased padding */
+        }
+
+        /* Dark mode styles for containers */
+        html.dark #signup, html.dark #signIn {
+            background-color: #2d3748; /* Dark background for forms */
+            color: #e2e8f0; /* Light text for dark mode */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.15); /* Darker shadow */
+        }
+
+        /* Text elements */
+        .form-title {
+            color: #333; /* Darker title for contrast */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Subtle text shadow */
+        }
+        html.dark .form-title, html.dark .or, html.dark .links p {
+            color: #e2e8f0;
+            text-shadow: none; /* Remove shadow in dark mode for clarity */
+        }
+
+        .or {
+            color: #777;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .links p {
+            color: #666;
+        }
+
+        /* Input groups */
+        .input-group label {
+            color: #666;
+        }
+        .input-group input {
+            border-color: #ccc;
+            transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            border-width: 2px; /* Slightly thicker border */
+        }
+        .input-group input:focus {
+            border-color: #667eea; /* Focus color matching gradient */
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3); /* Soft glow on focus */
+        }
+
+        html.dark .input-group label {
+            color: #a0aec0;
+        }
+        html.dark .input-group input {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border-color: #616e7f;
+        }
+        html.dark .input-group input:focus {
+            border-color: #63b3ed; /* Dark mode focus color */
+            box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.3);
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%); /* Gradient button */
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem; /* More padding */
+            border-radius: 0.5rem; /* Rounded corners */
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); /* Button shadow */
+            border: none; /* Remove default border */
+            cursor: pointer;
+        }
+        .btn:hover {
+            transform: translateY(-2px); /* Lift effect on hover */
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6); /* More intense shadow on hover */
+            opacity: 0.9; /* Slight opacity change */
+        }
+
+        html.dark .btn {
+            background: linear-gradient(45deg, #4299e1 0%, #63b3ed 100%); /* Dark mode button gradient */
+            box-shadow: 0 5px 15px rgba(66, 153, 225, 0.4);
+        }
+        html.dark .btn:hover {
+            box-shadow: 0 8px 20px rgba(66, 153, 225, 0.6);
+        }
+
+        /* Social Icons */
+        .icons i {
+            font-size: 2.5rem; /* Larger icons */
+            color: #666;
+            padding: 0.8rem; /* More padding */
+            border: 2px solid #ddd; /* Thicker border */
+            border-radius: 50%; /* Perfect circles */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow */
+        }
+        .icons i:hover {
+            transform: translateY(-3px) scale(1.1); /* Lift and slight scale effect */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* More pronounced shadow */
+            color: #4299e1; /* Blue on hover */
+            border-color: #4299e1;
+            background-color: rgba(66, 153, 225, 0.1); /* Light blue background on hover */
+        }
+
+        html.dark .icons i {
+            color: #a0aec0;
+            border-color: #616e7f;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        html.dark .icons i:hover {
+            color: #63b3ed;
+            border-color: #63b3ed;
+            background-color: rgba(99, 179, 237, 0.1);
+        }
+
+        /* Links (Forgot Password, Sign In/Up buttons) */
+        a {
+            color: #667eea; /* Link color matching light theme gradient */
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #5a67d8; /* Darker blue on hover */
+            text-decoration: underline;
+        }
+
+        html.dark a {
+            color: #63b3ed; /* Dark mode link color */
+        }
+        html.dark a:hover {
+            color: #4299e1;
+        }
+
+        /* Theme Toggle Button */
+        #themeToggle {
+            border: none;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        html.dark #themeToggle {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Message Div Styling */
+        .messageDiv {
+            font-weight: 600;
+            opacity: 0; /* Starts hidden, fades in with JS */
+            transition: opacity 0.5s ease-out;
+        }
+
+        /* Global Background Element - Enhanced */
+        #global-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* Behind particles and content */
+            /* Vibrant gradient for light theme */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: background-color 0.4s ease, background 0.4s ease; /* Transition for color/gradient change */
+        }
+        html.dark #global-background {
+            /* Darker, more sophisticated gradient for dark theme */
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 transition-colors duration-500 relative">
+
+    <!-- Global Background Element -->
+    <div id="global-background" class="absolute inset-0 z-0"></div>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="absolute top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow-md hover:scale-105 transition-transform duration-300 z-10">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:inline-block"></i>
+    </button>
+
+    <div class="relative z-10 w-full flex justify-center items-center py-8">
+        <div class="container bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl" id="signup" style="display:none;">
+            <h1 class="form-title text-3xl font-bold text-gray-800 mb-6 text-center">Register</h1>
+            <form method="post" action="" class="space-y-4">
+                <div id="signUpMessage" class="messageDiv text-sm text-center text-red-500 p-2 rounded-md bg-red-100" style="display:none;"></div>
+                <div class="input-group relative">
+                    <i class="fas fa-user absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="fName" placeholder="First Name" required class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="fName" class="sr-only">First Name</label>
+                </div>
+                <div class="input-group relative">
+                    <i class="fas fa-user absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="lName" placeholder="Last Name" required class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="lName" class="sr-only">Last Name</label>
+                </div>
+                <div class="input-group relative">
+                    <i class="fas fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="email" id="rEmail" placeholder="Email" required class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="rEmail" class="sr-only">Email</label>
+                </div>
+                <div class="input-group relative">
+                    <i class="fas fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="password" id="rPassword" placeholder="Password" required class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="rPassword" class="sr-only">Password</label>
+                </div>
+                <button class="btn w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors duration-300" id="submitSignUp">Sign Up</button>
+            </form>
+            <p class="or text-center text-gray-500 my-4">---------- or --------</p>
+            <div class="icons flex justify-center space-x-4 mb-6">
+                <i class="fab fa-google text-2xl text-gray-600 p-3 border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-colors duration-200"></i>
+                <i class="fab fa-facebook text-2xl text-gray-600 p-3 border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-colors duration-200"></i>
+            </div>
+            <div class="links text-center">
+                <p class="text-gray-600 mb-2">Already Have Account ?</p>
+                <button id="signInButton" class="text-blue-600 hover:underline font-medium">Sign In</button>
+            </div>
+        </div>
+
+        <div class="container bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl" id="signIn">
+            <h1 class="form-title text-3xl font-bold text-gray-800 mb-6 text-center">Sign In</h1>
+            <form method="post" action="" class="space-y-4">
+                <div id="signInMessage" class="messageDiv text-sm text-center text-red-500 p-2 rounded-md bg-red-100" style="display:none;"></div>
+
+                <div class="input-group relative">
+                    <i class="fas fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="email" id="email" placeholder="Email" required class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="email" class="sr-only">Email</label>
+                </div>
+                <div class="input-group relative">
+                    <i class="fas fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="password" id="password" placeholder="Password" required class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="password" class="sr-only">Password</label>
+                </div>
+                
+                <a href="#" id="forgotPasswordLink" class="text-blue-600 hover:underline text-sm block text-right mt-2">Forgot Password?</a>
+
+                <button class="btn w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors duration-300" id="submitSignIn">Sign In</button>
+            </form>
+            <p class="or text-center text-gray-500 my-4">---------- or --------</p>
+            <div class="icons flex justify-center space-x-4 mb-6">
+                <i class="fab fa-google text-2xl text-gray-600 p-3 border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-colors duration-200"></i>
+                <i class="fab fa-facebook text-2xl text-gray-600 p-3 border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 transition-colors duration-200"></i>
+            </div>
+            <div class="links text-center">
+                <p class="text-gray-600 mb-2">Don't have account yet?</p>
+                <button id="signUpButton" class="text-blue-600 hover:underline font-medium">Sign Up</button>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="firebaseauth.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
