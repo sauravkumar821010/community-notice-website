@@ -1,0 +1,1492 @@
+
+<!DOCTYPE html>
+<html lang="en" class="light"> <!-- Default to light theme -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Digital Notice Board</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- particles.js CDN for background effects -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        /* Custom styles to ensure Inter font and smooth scrolling */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        /* Base styles for light theme */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: transparent; /* Let global-background handle body background */
+            color: #2d3748; /* Darker text for readability */
+            transition: color 0.4s ease;
+        }
+
+        /* Dark theme styles */
+        html.dark body {
+            color: #e2e8f0; /* Light text */
+        }
+
+        html.dark header {
+            background-image: linear-gradient(to right, #2a0a5e, #4a148c); /* Darker gradient for header */
+        }
+
+        html.dark .hero-section {
+            background-image: linear-gradient(to bottom right, #3a0f7e, #5c1e9e); /* Darker gradient for hero */
+        }
+
+        html.dark section {
+            background-color: #202933; /* Darker, slightly desaturated blue-gray for sections */
+            border-color: #4a5568; /* Darker border */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); /* More pronounced shadow in dark mode */
+        }
+
+        /* Refined dark mode card backgrounds */
+        html.dark .bg-indigo-50 { background-color: #2C2F4F; border-color: #4A4E7A; } /* Dark muted indigo */
+        html.dark .bg-purple-50 { background-color: #3A244A; border-color: #55356A; } /* Dark muted purple */
+        html.dark .bg-emerald-50 { background-color: #2A4A4A; border-color: #456A6A; } /* Dark muted emerald */
+        html.dark .bg-blue-50 { background-color: #24374A; border-color: #3D5A7A; } /* Dark muted blue */
+        /* New dark mode background for admin messages */
+        html.dark .bg-gray-100 { background-color: #333a45; border-color: #555f6f; }
+
+
+        html.dark .text-indigo-700 { color: #a5b4fc; } /* Lighter text for cards */
+        html.dark .text-purple-700 { color: #d8b4fe; }
+        html.dark .text-emerald-700 { color: #6ee7b7; }
+        html.dark .text-blue-700 { color: #93c5fd; }
+        html.dark .text-indigo-800 { color: #c7d2fe; } /* Lighter section headings */
+        html.dark .border-indigo-300 { border-color: #6366f1; } /* Lighter border for headings */
+        html.dark .text-gray-700 { color: #cbd5e0; } /* Lighter general text */
+        html.dark .text-gray-500 { color: #a0aec0; } /* Lighter subtle text */
+        html.dark .text-gray-600 { color: #a0aec0; }
+
+        html.dark .bg-gray-50 { background-color: #4a5568; border-color: #606f82; } /* Darker form backgrounds */
+        html.dark .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2); }
+        html.dark .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.12); }
+        html.dark .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15); }
+        html.dark .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2); }
+        html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        html.dark .shadow-inner { box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2); }
+
+        html.dark input, html.dark textarea, html.dark select {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+        html.dark input:focus, html.dark textarea:focus, html.dark select:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Style for the "Back to Top" button */
+        #backToTopBtn {
+            display: none; /* Hidden by default */
+            position: fixed; /* Fixed position */
+            bottom: 20px; /* Place at the bottom */
+            right: 20px; /* Place at the right */
+            z-index: 99; /* Ensure it's above other content */
+            border: none; /* Remove borders */
+            outline: none; /* Remove outline */
+            background-color: #4f46e5; /* Primary purple color */
+            color: white; /* White text */
+            cursor: pointer; /* Add a mouse pointer on hover */
+            padding: 15px; /* Some padding */
+            border-radius: 50%; /* Rounded corners */
+            font-size: 18px; /* Increase font size */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* More prominent shadow */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition and scale */
+        }
+
+        #backToTopBtn:hover {
+            background-color: #6366f1; /* Lighter purple on hover */
+            transform: translateY(-3px); /* Slight lift */
+        }
+
+        /* Card hover effect */
+        .card-hover-effect {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        html.dark .card-hover-effect:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Admin panel slide-down animation */
+        #adminPanel.hidden {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out, margin 0.5s ease-out, opacity 0.3s ease-out;
+            opacity: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+        #adminPanel:not(.hidden) {
+            max-height: 1000px; /* Arbitrarily large value for slide down */
+            opacity: 1;
+            transition: max-height 0.7s ease-in, padding 0.7s ease-in, margin 0.7s ease-in, opacity 0.5s ease-in 0.2s;
+        }
+
+        /* Login form specific animation */
+        #adminLoginForm.hidden {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+        #adminLoginForm:not(.hidden) {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+        }
+
+        /* Admin content specific animation */
+        #adminContent.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+        #adminContent:not(.hidden) {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+        }
+
+        /* Scroll Reveal Animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Toast Notification */
+        #toast-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+        #toast-notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        #toast-notification.success {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+        #toast-notification.error {
+            background-color: #f44336; /* Red */
+            color: white;
+        }
+
+        /* Confirmation Modal */
+        .confirm-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .confirm-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .confirm-modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        .confirm-modal-overlay.show .confirm-modal-content {
+            transform: translateY(0);
+        }
+        html.dark .confirm-modal-content {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+
+        /* Global Background and Particles */
+        #global-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2; /* Behind particles and content */
+    background-color: #4f46e5; /* Solid color for light theme */
+    background-size: cover; /* Still good practice even with solid color */
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background-color 0.4s ease; /* Transition for color change */
+}
+html.dark #global-background {
+    background-color: #1a202c; /* Solid color for dark theme */
+}
+
+
+        #particles-js {
+            position: absolute; /* Relative to #global-background */
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1; /* Behind content, above global-background */
+            background-color: transparent;
+        }
+
+        #content-wrapper {
+            position: relative; /* To establish stacking context for z-index */
+            z-index: 1; /* Above particles and global-background */
+        }
+
+        /* Utility class for hiding elements completely */
+        .display-none {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    
+    <!-- Global Background Container -->
+    <div id="global-background">
+        <div id="particles-js"></div> <!-- particles.js container -->
+    </div>
+
+    <!-- Content Wrapper -->
+    <div id="mainContentWrapper">
+        <!-- Header Section -->
+        <header class="bg-gradient-to-r from-indigo-700 to-purple-800 text-white p-6 shadow-xl rounded-b-xl">
+            <div class="container mx-auto flex flex-col items-center"> <!-- Changed to flex-col and items-center -->
+                <h1 class="text-4xl font-extrabold mb-4 tracking-tight text-center">Welcome to Community Hub</h1> <!-- Centered text -->
+                <nav>
+                    <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-lg"> <!-- Increased horizontal gap -->
+                        <li><a href="#announcements" class="hover:text-indigo-200 hover:font-semibold transition duration-300 ease-in-out transform hover:scale-105">Announcements <span class="text-white">&#128227;</span></a></li>
+                        <li><a href="#events" class="hover:text-indigo-200 hover:font-semibold transition duration-300 ease-in-out transform hover:scale-105">Events <span class="text-white">&#128197;</span></a></li>
+                        <li><a href="#buy-sell-rent" class="hover:text-indigo-200 hover:font-semibold transition duration-300 ease-in-out transform hover:scale-105">Marketplace <span class="text-white">&#128722;</span></a></li>
+                        <li><a href="#community-gallery" class="hover:text-indigo-200 hover:font-semibold transition duration-300 ease-in-out transform hover:scale-105">Gallery <span class="text-white">&#128247;</span></a></li>
+                        <li><a href="#contacts" class="hover:text-indigo-200 hover:font-semibold transition duration-300 ease-in-out transform hover:scale-105">Contacts <span class="text-white">&#128222;</span></a></li>
+                        <li><a href="#community-guidelines" class="hover:text-indigo-200 hover:font-semibold transition duration-300 ease-in-out transform hover:scale-105">Guidelines <span class="text-white">&#128214;</span></a></li>
+                        <li><a href="#contact-admin" class="hover:text-indigo-200 hover:font-semibold transition duration-300 ease-in-out transform hover:scale-105">Contact Admin <span class="text-white">&#128231;</span></a></li>
+                        <li><button id="adminToggleBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-1.5 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-opacity-75">Admin Login</button></li>
+                        <li>
+                            <button id="themeToggle" class="bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75">
+                                <svg id="sunIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2.5a.5.5 0 01.5.5v2a.5.5 0 01-1 0v-2a.5.5 0 01.5-.5zM12 19.5a.5.5 0 01.5.5v2a.5.5 0 01-1 0v-2a.5.5 0 01.5-.5zM19.5 12a.5.5 0 01.5-.5h2a.5.5 0 010 1h-2a.5.5 0 01-.5-.5zM2.5 12a.5.5 0 01.5-.5h2a.5.5 0 010 1h-2a.5.5 0 01-.5-.5zM18.364 5.636a.5.5 0 01.354.854l-1.414 1.414a.5.5 0 11-.707-.707l1.414-1.414a.5.5 0 01.353-.147zM6.343 17.657a.5.5 0 01.354.854l-1.414 1.414a.5.5 0 11-.707-.707l1.414-1.414a.5.5 0 01.353-.147zM17.657 6.343a.5.5 0 01.854-.354l1.414-1.414a.5.5 0 11-.707-.707l-1.414 1.414a.5.5 0 01-.147.353zM5.636 18.364a.5.5 0 01.854-.354l1.414-1.414a.5.5 0 11-.707-.707l-1.414 1.414a.5.5 0 01-.147.353zM12 7a5 5 0 100 10 5 5 0 000-10z"/>
+                                </svg>
+                                <svg id="moonIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                    <path d="M12 3a9 9 0 109 9c0-.46-.05-.92-.14-1.36a.75.75 0 01.89-.89A10.5 10.5 0 0122.5 12C22.5 17.79 17.79 22.5 12 22.5S1.5 17.79 1.5 12 6.21 1.5 12 1.5c.46 0 .92.05 1.36.14a.75.75 0 01.89.89A9 9 0 0012 3z"/>
+                                </svg>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- Search Bar -->
+            <div class="container mx-auto mt-6">
+                <input type="text" id="searchInput" placeholder="Search announcements, events, or marketplace items..." class="w-full p-3 rounded-lg shadow-md bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition duration-200">
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section id="heroSection" class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white py-20 px-6 text-center shadow-inner rounded-b-xl mb-12 hero-section relative overflow-hidden">
+            <div class="container mx-auto relative z-10">
+                <h2 class="text-5xl md:text-6xl font-extrabold mb-4 animate-fade-in-up drop-shadow-lg">Your Local Community's Digital Notice Board</h2>
+                <p class="text-xl md:text-2xl opacity-90 mb-8 animate-fade-in-up delay-100 max-w-3xl mx-auto">Connecting neighbors, sharing news, and building a stronger community.</p>
+                <a href="#announcements" class="inline-block bg-white text-indigo-700 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-100 transition duration-300 ease-in-out transform hover:scale-105 animate-fade-in-up delay-200 border-b-4 border-indigo-900">
+                    Explore Announcements
+                </a>
+            </div>
+            <!-- Subtle background elements for visual interest -->
+            <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+                    <defs><pattern id="pattern-circles" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="1" fill="white"/></pattern></defs>
+                    <rect x="0" y="0" width="100" height="100" fill="url(#pattern-circles)"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Main Content Area -->
+        <main class="container mx-auto p-6 mt-8">
+
+            <!-- Admin Panel (Initially Hidden) -->
+            <section id="adminPanel" class="hidden bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl mb-12 border border-gray-100 dark:border-gray-700 scroll-reveal">
+                <h2 class="text-4xl font-bold text-indigo-800 dark:text-indigo-300 mb-8 border-b-4 pb-4 border-indigo-300 dark:border-indigo-600">Admin Panel</h2>
+                <p class="text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
+                    <strong class="text-red-600 font-semibold">Important Note:</strong> This is a client-side demonstration with a hardcoded password. In a production environment, this panel would be secured with robust authentication (e.g., username/password, OAuth) and connected to a persistent backend database (like Firebase, PostgreSQL, MongoDB) to ensure data is saved and accessible only by authorized personnel.
+                </p>
+
+                <!-- Admin Login Form -->
+                <div id="adminLoginForm" class="max-w-md mx-auto bg-gray-50 dark:bg-gray-700 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-600">
+                    <h3 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6 text-center">Admin Login</h3>
+                    <form id="loginForm" class="space-y-5">
+                        <div>
+                            <label for="adminPassword" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Password:</label>
+                            <input type="password" id="adminPassword" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="Enter admin password" required>
+                        </div>
+                        <p id="loginMessage" class="text-center text-sm font-medium"></p>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75">Login</button>
+                    </form>
+                </div>
+
+                <!-- Admin Content (Hidden until logged in) -->
+                <div id="adminContent" class="hidden mt-10">
+                    <button id="backToMainSiteBtn" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75">
+                        &larr; Back to Main Site
+                    </button>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                        <!-- Add Announcement Form -->
+                        <div class="bg-gray-50 dark:bg-gray-700 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-600">
+                            <h3 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Post New Announcement</h3>
+                            <form id="addAnnouncementForm" class="space-y-5">
+                                <div>
+                                    <label for="announcementTitle" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Title:</label>
+                                    <input type="text" id="announcementTitle" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="e.g., Upcoming Maintenance" required>
+                                </div>
+                                <div>
+                                    <label for="announcementContent" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Content:</label>
+                                    <textarea id="announcementContent" rows="5" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="Detailed message for residents..." required></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75">Publish Announcement</button>
+                            </form>
+                        </div>
+
+                        <!-- Add Event Form -->
+                        <div class="bg-gray-50 dark:bg-gray-700 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-600">
+                            <h3 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Schedule New Event</h3>
+                            <form id="addEventForm" class="space-y-5">
+                                <div>
+                                    <label for="eventTitle" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Event Title:</label>
+                                    <input type="text" id="eventTitle" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="e.g., Community Fun Fair" required>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="eventDate" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Date:</label>
+                                        <input type="date" id="eventDate" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" required>
+                                    </div>
+                                    <div>
+                                        <label for="eventTime" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Time (Optional):</label>
+                                        <input type="time" id="eventTime" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="eventLocation" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Location:</label>
+                                    <input type="text" id="eventLocation" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="e.g., Community Hall, Park" required>
+                                </div>
+                                <div>
+                                    <label for="eventDescription" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Description (Optional):</label>
+                                    <textarea id="eventDescription" rows="3" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="Brief details about the event..."></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75">Add Event</button>
+                            </form>
+                        </div>
+
+                        <!-- Add Buy/Sell/Rent Post Form -->
+                        <div class="bg-gray-50 dark:bg-gray-700 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-600 lg:col-span-2">
+                            <h3 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Create Buy/Sell/Rent Post</h3>
+                            <form id="addBSRForm" class="space-y-5">
+                                <div>
+                                    <label for="bsrType" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Post Type:</label>
+                                    <select id="bsrType" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" required>
+                                        <option value="">Select Type</option>
+                                        <option value="Buy">Looking to Buy</option>
+                                        <option value="Sell">For Sale</option>
+                                        <option value="Rent">For Rent / Looking to Rent</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="bsrItem" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Item/Service:</label>
+                                    <input type="text" id="bsrItem" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="e.g., Old Books, Bicycle, Apartment" required>
+                                </div>
+                                <div>
+                                    <label for="bsrDescription" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Description:</label>
+                                    <textarea id="bsrDescription" rows="4" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="Provide details about the item/service..." required></textarea>
+                                </div>
+                                <div>
+                                    <label for="bsrImageUrl" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Image URL (Optional):</label>
+                                    <input type="url" id="bsrImageUrl" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="e.g., https://example.com/image.jpg">
+                                </div>
+                                <div>
+                                    <label for="bsrContact" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Contact Information:</label>
+                                    <input type="text" id="bsrContact" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="e.g., Phone: 123-456-7890, Email: example@email.com" required>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75">Post Listing</button>
+                            </form>
+                        </div>
+
+                        <!-- Admin Messages Section -->
+                        <div class="bg-gray-50 dark:bg-gray-700 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-600 lg:col-span-2">
+                            <h3 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6 flex justify-between items-center">
+                                Admin Messages
+                                <span id="adminMessageCount" class="bg-indigo-600 text-white text-lg font-semibold px-4 py-1 rounded-full">0</span>
+                            </h3>
+                            <div id="adminMessagesList" class="space-y-4">
+                                <!-- Admin messages will be appended here -->
+                                <div class="admin-message-item bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600 relative">
+                                    <p class="font-semibold text-gray-800 dark:text-gray-200">From: John Doe &lt;john.doe@example.com&gt;</p>
+                                    <p class="text-gray-700 dark:text-gray-300 text-sm">Subject: General Inquiry</p>
+                                    <p class="text-gray-600 dark:text-gray-400 mt-2">This is an example message from a resident. I wanted to inquire about the upcoming community event details. Thanks!</p>
+                                    <p class="text-gray-500 dark:text-gray-500 text-xs text-right mt-2">Received: July 19, 2025</p>
+                                    <button class="delete-btn absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full hidden" title="Delete Message">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-2 3a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Announcements Section -->
+            <section id="announcements" class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl mb-12 border border-gray-100 dark:border-gray-700 scroll-reveal">
+                <h2 class="text-4xl font-bold text-indigo-800 dark:text-indigo-300 mb-8 border-b-4 pb-4 border-indigo-300 dark:border-indigo-600 flex justify-between items-center">
+                    Announcements <span class="text-indigo-500">&#128227;</span>
+                    <span id="announcementCount" class="bg-indigo-600 text-white text-lg font-semibold px-4 py-1 rounded-full">0</span>
+                </h2>
+                <div id="announcementsList" class="space-y-8">
+                    <!-- Example Announcement -->
+                    <div class="announcement-item bg-indigo-50 dark:bg-gray-700 p-6 rounded-xl shadow-md border border-indigo-100 dark:border-gray-600 card-hover-effect border-l-4 border-indigo-500 relative">
+                        <h3 class="text-2xl font-bold text-indigo-700 dark:text-indigo-300 mb-3">Important Notice: Water Supply Interruption</h3>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">Dear Residents, please be informed that there will be a scheduled water supply interruption on July 25, 2025, from 10:00 AM to 2:00 PM for essential maintenance work. We appreciate your understanding and apologize for any inconvenience caused.</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm text-right font-medium">Posted: July 19, 2025</p>
+                        <button class="delete-btn absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full hidden" title="Delete Announcement">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-2 3a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                        </button>
+                    </div>
+                    <div class="announcement-item bg-indigo-50 dark:bg-gray-700 p-6 rounded-xl shadow-md border border-indigo-100 dark:border-gray-600 card-hover-effect border-l-4 border-indigo-500 relative">
+                        <h3 class="text-2xl font-bold text-indigo-700 dark:text-indigo-300 mb-3">Annual General Meeting</h3>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">The Annual General Meeting (AGM) will be held on August 10, 2025, at 7:00 PM in the Community Hall. Your presence is highly encouraged as we discuss important community matters and future plans.</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm text-right font-medium">Posted: July 15, 2025</p>
+                        <button class="delete-btn absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full hidden" title="Delete Announcement">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-2 3a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Local Events Section -->
+            <section id="events" class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl mb-12 border border-gray-100 dark:border-gray-700 scroll-reveal">
+                <h2 class="text-4xl font-bold text-indigo-800 dark:text-indigo-300 mb-8 border-b-4 pb-4 border-indigo-300 dark:border-indigo-600 flex justify-between items-center">
+                    Upcoming Events <span class="text-purple-500">&#128197;</span>
+                    <span id="eventCount" class="bg-indigo-600 text-white text-lg font-semibold px-4 py-1 rounded-full">0</span>
+                </h2>
+                <div id="eventsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Example Event -->
+                    <div class="event-item bg-purple-50 dark:bg-gray-700 p-6 rounded-xl shadow-md border border-purple-100 dark:border-gray-600 card-hover-effect border-l-4 border-purple-500 relative">
+                        <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-3">Community Clean-up Drive</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mb-2"><strong class="font-semibold">Date:</strong> August 3, 2025</p>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mb-2"><strong class="font-semibold">Time:</strong> 9:00 AM - 12:00 PM</p>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mb-4"><strong class="font-semibold">Location:</strong> Central Park</p>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-3">Join us to help keep our community clean and green! All volunteers are welcome, and refreshments will be provided.</p>
+                        <button class="delete-btn absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full hidden" title="Delete Event">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-2 3a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                        </button>
+                    </div>
+                    <div class="event-item bg-purple-50 dark:bg-gray-700 p-6 rounded-xl shadow-md border border-purple-100 dark:border-gray-600 card-hover-effect border-l-4 border-purple-500 relative">
+                        <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-3">Kids' Story Time</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mb-2"><strong class="font-semibold">Date:</strong> Every Saturday</p>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mb-2"><strong class="font-semibold">Time:</strong> 11:00 AM</p>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mb-4"><strong class="font-semibold">Location:</strong> Society Library</p>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-3">Bring your little ones for an hour of enchanting stories, interactive games, and fun activities!</p>
+                        <button class="delete-btn absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full hidden" title="Delete Event">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-2 3a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Buy/Sell/Rent Postings Section -->
+            <section id="buy-sell-rent" class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl mb-12 border border-gray-100 dark:border-gray-700 scroll-reveal">
+                <h2 class="text-4xl font-bold text-indigo-800 dark:text-indigo-300 mb-8 border-b-4 pb-4 border-indigo-300 dark:border-indigo-600 flex justify-between items-center">
+                    Marketplace Items <span class="text-emerald-500">&#128722;</span>
+                    <span id="bsrCount" class="bg-indigo-600 text-white text-lg font-semibold px-4 py-1 rounded-full">0</span>
+                </h2>
+                <div id="bsrList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Example BSR Post -->
+                    <div class="bsr-item bg-emerald-50 dark:bg-gray-700 p-6 rounded-xl shadow-md border border-emerald-100 dark:border-gray-600 card-hover-effect border-l-4 border-emerald-500 relative">
+                        <div class="flex items-center justify-center h-32 bg-emerald-100 dark:bg-gray-600 rounded-lg mb-4 text-emerald-600 dark:text-emerald-300 text-6xl">
+                            <img src="https://i5.walmartimages.com/seo/26-Inch-Mountain-Bike-iRerts-Mens-Bike-Women-Teenagers-Shimano-21-Speed-Bicycle-Disc-Brake-Height-Adjustable-Adult-Bicycles-Camping-Roadways_1c054de4-463a-4ead-8d33-a46e4df6a82d.608f610cd837a28d9298239ea904b3a0.jpeg" alt="Bicycle" class="w-full h-full object-cover rounded-lg">
+                        </div>
+                        <h3 class="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mb-3">For Sale: Gently Used Bicycle</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mb-2"><strong class="font-semibold">Type:</strong> Sell</p>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mb-4"><strong>Item:</strong> Adult Mountain Bike (21-speed)</p>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-3">Hardly used mountain bike, in excellent condition. Perfect for daily commutes or weekend trails. Price negotiable. Comes with a helmet.</p>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mt-4"><strong class="font-semibold">Contact:</strong> John Doe (<a href="tel:+1234567890" class="text-emerald-600 hover:underline dark:text-emerald-400">123-456-7890</a>)</p>
+                        <button class="delete-btn absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full hidden" title="Delete Listing">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-2 3a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                        </button>
+                    </div>
+                    <div class="bsr-item bg-emerald-50 dark:bg-gray-700 p-6 rounded-xl shadow-md border border-emerald-100 dark:border-gray-600 card-hover-effect border-l-4 border-emerald-500 relative">
+                        <div class="flex items-center justify-center h-32 bg-emerald-100 dark:bg-gray-600 rounded-lg mb-4 text-emerald-600 dark:text-emerald-300 text-6xl">
+                            <img src="https://thearchitectsdiary.com/wp-content/uploads/2022/12/KIYAANS-DESIGN-STUDIO-16.jpg" alt="Apartment" class="w-full h-full object-cover rounded-lg">
+                        </div>
+                        <h3 class="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mb-3">Seeking: 2BHK Apartment for Rent</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mb-2"><strong class="font-semibold">Type:</strong> Rent</p>
+                        <p class="text-700 dark:text-gray-300 text-base mb-4"><strong>Item:</strong> 2BHK Apartment</p>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-3">Family of three looking for a spacious 2BHK apartment within the society. Preferred ground floor or with easy lift access. Ready to move in by next month. Long-term lease preferred.</p>
+                        <p class="text-700 dark:text-gray-300 text-base mt-4"><strong class="font-semibold">Contact:</strong> Jane Smith (<a href="tel:+9876543210" class="text-emerald-600 hover:underline dark:text-emerald-400">987-654-3210</a>)</p>
+                        <button class="delete-btn absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full hidden" title="Delete Listing">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-2 3a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Community Gallery Section -->
+            <section id="community-gallery" class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl mb-12 border border-gray-100 dark:border-gray-700 scroll-reveal">
+                <h2 class="text-4xl font-bold text-indigo-800 dark:text-indigo-300 mb-8 border-b-4 pb-4 border-indigo-300 dark:border-indigo-600 flex justify-between items-center">
+                    Community Gallery <span class="text-blue-500">&#128247;</span>
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div class="relative overflow-hidden rounded-lg shadow-md group">
+                        <img src="https://tse1.mm.bing.net/th/id/OIP.L89bgZjMSxcreeXENgZN9wHaD8?r=0&w=750&h=400&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Community Event 1" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <p class="text-white text-lg font-semibold">Summer Festival</p>
+                        </div>
+                    </div>
+                    <div class="relative overflow-hidden rounded-lg shadow-md group">
+                        <img src="https://th.bing.com/th/id/R.dede73d9e58cb16db881329865227ca3?rik=cl0ua0wf0WuA2Q&riu=http%3a%2f%2f3.bp.blogspot.com%2f-K4KSui0EaIg%2fVDoZ0PayLWI%2fAAAAAAAAADs%2fITCREyFHXMk%2fs1600%2f1-kicktrio.jpg&ehk=4B%2frtXr%2bXthBOhAj59gcNWSgB0mI0yuN0AvT0JYd%2fgg%3d&risl=&pid=ImgRaw&r=0" alt="Clean-up Drive" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <p class="text-white text-lg font-semibold">Park Clean-up</p>
+                        </div>
+                    </div>
+                    <div class="relative overflow-hidden rounded-lg shadow-md group">
+                        <img src="https://tse1.mm.bing.net/th/id/OIP.bigEt3-5BWP9H3wINZZSngHaE7?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Kids Play" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <p class="text-white text-lg font-semibold">Kids' Fun Day</p>
+                        </div>
+                    </div>
+                    <div class="relative overflow-hidden rounded-lg shadow-md group">
+                        <img src="https://shashirai.in/wp-content/uploads/2022/08/WhatsApp-Image-2022-08-17-at-12.47.00-PM-1.jpeg" alt="Neighbours Meet" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <p class="text-white text-lg font-semibold">Neighbours' Meetup</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Important Contacts Section -->
+            <section id="contacts" class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl mb-12 border border-gray-100 dark:border-gray-700 scroll-reveal">
+                <h2 class="text-4xl font-bold text-indigo-800 dark:text-indigo-300 mb-8 border-b-4 pb-4 border-indigo-300 dark:border-indigo-600 flex justify-between items-center">
+                    Important Contacts <span class="text-blue-500">&#128222;</span>
+                    <span id="communityMemberCount" class="bg-indigo-600 text-white text-lg font-semibold px-4 py-1 rounded-full">3</span> <!-- Placeholder count -->
+                </h2>
+                <div id="contactsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Example Contact -->
+                    <div class="contact-item bg-blue-50 dark:bg-gray-700 p-6 rounded-xl shadow-md border border-blue-100 dark:border-gray-600 card-hover-effect border-l-4 border-blue-500 relative">
+                        <h3 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-3">Society Manager</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mb-2"><strong class="font-semibold">Name:</strong> Mr. Sharma</p>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mb-2"><strong class="font-semibold">Phone:</strong> <a href="tel:+919876543210" class="text-blue-600 hover:underline dark:text-blue-400">+91 98765 43210</a></p>
+                        <p class="text-gray-700 dark:text-gray-300 text-base"><strong class="font-semibold">Email:</strong> <a href="mailto:manager@society.com" class="text-blue-600 hover:underline dark:text-blue-400">manager@society.com</a></p>
+                        <button class="delete-btn absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full hidden" title="Delete Contact">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-2 3a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                        </button>
+                    </div>
+                    <div class="contact-item bg-blue-50 dark:bg-gray-700 p-6 rounded-xl shadow-md border border-blue-100 dark:border-gray-600 card-hover-effect border-l-4 border-blue-500 relative">
+                        <h3 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-3">Emergency Services</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mb-2"><strong class="font-semibold">Police:</strong> <a href="tel:100" class="text-blue-600 hover:underline dark:text-blue-400">100</a></p>
+                        <p class="text-gray-700 dark:text-gray-300 text-base mb-2"><strong class="font-semibold">Fire:</strong> <a href="tel:101" class="text-blue-600 hover:underline dark:text-blue-400">101</a></p>
+                        <p class="text-gray-700 dark:text-gray-300 text-base"><strong class="font-semibold">Ambulance:</strong> <a href="tel:102" class="text-blue-600 hover:underline dark:text-blue-400">102</a></p>
+                        <button class="delete-btn absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full hidden" title="Delete Contact">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-2 3a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Community Guidelines Section -->
+            <section id="community-guidelines" class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl mb-12 border border-gray-100 dark:border-gray-700 scroll-reveal">
+                <h2 class="text-4xl font-bold text-indigo-800 dark:text-indigo-300 mb-8 border-b-4 pb-4 border-indigo-300 dark:border-indigo-600">Community Guidelines <span class="text-indigo-500">&#128214;</span></h2>
+                <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
+                    <p>To ensure a positive and harmonious environment, please follow these simple guidelines:</p>
+                    <ul class="list-disc list-inside space-y-2 mt-4">
+                        <li><strong>Be Respectful:</strong> Communicate kindly and avoid offensive language.</li>
+                        <li><strong>Respect Privacy:</strong> Do not share personal information without consent.</li>
+                        <li><strong>Mind Noise:</strong> Keep noise levels low, especially during quiet hours (10 PM - 8 AM).</li>
+                        <li><strong>Keep it Clean:</strong> Dispose of waste properly and help maintain common areas.</li>
+                        <li><strong>Pet Owners:</strong> Leash pets in common areas and clean up after them.</li>
+                        <li><strong>Use Facilities Responsibly:</strong> Leave common areas clean for others.</li>
+                        <li><strong>Stay Secure:</strong> Report suspicious activity to management.</li>
+                        <li><strong>Fair Marketplace:</strong> Keep buy/sell/rent posts non-commercial and accurate.</li>
+                        <li><strong>Engage & Connect:</strong> Participate in events to build community spirit.</li>
+                        <li><strong>Share Feedback:</strong> Use the contact form for constructive suggestions.</li>
+                    </ul>
+                    <p class="mt-6 text-lg font-semibold text-indigo-700 dark:text-indigo-300">
+                        Why join our community?
+                    </p>
+                    <p class="mt-2 leading-relaxed">
+                        Joining our community means becoming part of a supportive network where you can connect with neighbors, stay informed about local happenings, find useful services, and contribute to a vibrant living environment. It's a place to share, grow, and build lasting relationships right where you live!
+                    </p>
+                </div>
+            </section>
+
+            <!-- Contact Admin Section -->
+            <section id="contact-admin" class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl mb-12 border border-gray-100 dark:border-gray-700 scroll-reveal">
+                <h2 class="text-4xl font-bold text-indigo-800 dark:text-indigo-300 mb-8 border-b-4 pb-4 border-indigo-300 dark:border-indigo-600">Contact Admin <span class="text-indigo-500">&#128231;</span></h2>
+                <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">Have a question, suggestion, or need to report an issue? Use the form below to send a message directly to the community administrators. We aim to respond within 24-48 hours.</p>
+
+                <form id="contactAdminForm" class="space-y-6">
+                    <div>
+                        <label for="contactName" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Your Name:</label>
+                        <input type="text" id="contactName" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="Enter your name" required>
+                    </div>
+                    <div>
+                        <label for="contactEmail" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Your Email:</label>
+                        <input type="email" id="contactEmail" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="your.email@example.com" required>
+                    </div>
+                    <div>
+                        <label for="contactSubject" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Subject:</label>
+                        <input type="text" id="contactSubject" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="e.g., Feedback, Complaint, Suggestion" required>
+                    </div>
+                    <div>
+                        <label for="contactMessage" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Message:</label>
+                        <textarea id="contactMessage" rows="6" class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-lg w-full py-3 px-4 text-gray-800 dark:text-gray-200 leading-tight focus:outline-none focus:ring-3 focus:ring-indigo-400 focus:border-transparent transition duration-200" placeholder="Type your message here..." required></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75">Send Message</button>
+                </form>
+            </section>
+
+        </main>
+
+        <!-- Footer Section -->
+        <footer id="mainFooter" class="bg-gray-900 text-white p-8 text-center mt-12 rounded-t-xl shadow-inner">
+            <div class="container mx-auto">
+                <p class="text-lg mb-2">&copy; 2025 Community Hub. All rights reserved.</p>
+                <p class="text-md opacity-80">Connecting and empowering our local community.</p>
+                <div class="flex justify-center space-x-6 mt-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">Terms of Service</a>
+                </div>
+                <!-- Quick Links -->
+                <div class="mt-8 pt-6 border-t border-gray-700">
+                    <h3 class="text-xl font-semibold mb-4">Quick Links & Support</h3>
+                    <div class="flex flex-wrap justify-center space-x-6 text-sm">
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-300 flex items-center">
+                            <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.732-1A3 3 0 0113 8a3 3 0 01-2.006 2.83L10 11.173V13h2v-2.172a1 1 0 00-.293-.707L9.586 8H9v-.5a1 1 0 00.5-1z" clip-rule="evenodd"></path></svg>
+                            Support
+                        </a>
+                        <a href="mailto:support@communityhub.com" class="text-gray-300 hover:text-white transition duration-300 flex items-center">
+                            <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                            Mail Us
+                        </a>
+                        <a href="https://wa.me/919876543210?text=Hello%20Community%20Hub%20Support" target="_blank" class="text-gray-300 hover:text-white transition duration-300 flex items-center">
+                            <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 2C7.54 2 3.84 5.68 3.84 10.18C3.84 11.66 4.25 13.06 5 14.24L4 18L7.88 17.04C9.06 17.79 10.45 18.18 12.04 18.18C16.54 18.18 20.24 14.5 20.24 10C20.24 5.5 16.54 2 12.04 2ZM16.34 14.56C16.1 14.96 15.7 15.15 15.26 15.15C14.82 15.15 14.42 14.96 14.18 14.56L12.04 12.42L9.9 14.56C9.66 14.96 9.26 15.15 8.82 15.15C8.38 15.15 7.98 14.96 7.74 14.56L6.5 12.42L8.64 10.28C8.88 9.88 9.28 9.69 9.72 9.69C10.16 9.69 10.56 9.88 10.8 10.28L12.94 12.42L15.08 10.28C15.32 9.88 15.72 9.69 16.16 9.69C16.6 9.69 17 9.88 17.24 10.28L18.48 12.42L16.34 14.56Z"></path></svg>
+                            WhatsApp
+                        </a>
+                        <a href="https://twitter.com/communityhub_example" target="_blank" class="text-gray-300 hover:text-white transition duration-300 flex items-center">
+                            <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.46 6c-.77.34-1.6.56-2.46.66.88-.53 1.56-1.37 1.88-2.38-.82.49-1.73.84-2.69 1.03C18.3 4.11 17.21 3.5 16 3.5c-2.38 0-4.32 1.94-4.32 4.32 0 .34.04.67.11.99C8.6 8.5 5.7 6.91 3.7 4.3c-.37.64-.58 1.38-.58 2.18 0 1.5.77 2.82 1.94 3.6A3.94 3.94 0 013 9.4c0 .02 0 .04 0 .06.01 2.11 1.5 3.87 3.48 4.28-.35.09-.72.14-1.1.14-.27 0-.53-.02-.79-.08.55 1.72 2.15 2.98 4.05 3.01C10.1 17.8 8.13 18.5 6 18.5c-.39 0-.77-.02-1.14-.07 2.01 1.29 4.39 2.04 6.97 2.04 8.35 0 12.92-6.92 12.92-12.92 0-.2 0-.39-.01-.59.89-.64 1.66-1.44 2.27-2.35z"></path></svg>
+                            Twitter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTopBtn" title="Go to top">&#9650;</button>
+
+    <!-- Toast Notification Element -->
+    <div id="toast-notification" class="hidden"></div>
+
+    <!-- Confirmation Modal Structure -->
+    <div id="confirmModal" class="confirm-modal-overlay">
+        <div class="confirm-modal-content">
+            <h3 class="text-xl font-semibold mb-4">Confirm Deletion</h3>
+            <p class="text-gray-700 dark:text-gray-300 mb-6">Are you sure you want to delete this item? This action cannot be undone.</p>
+            <div class="flex justify-center space-x-4">
+                <button id="cancelDeleteBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-5 rounded-lg transition duration-300">Cancel</button>
+                <button id="confirmDeleteBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-5 rounded-lg transition duration-300">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for dynamic content and admin panel
+        document.addEventListener('DOMContentLoaded', () => {
+            const adminToggleBtn = document.getElementById('adminToggleBtn');
+            const adminPanel = document.getElementById('adminPanel');
+            const adminLoginForm = document.getElementById('adminLoginForm');
+            const adminContent = document.getElementById('adminContent');
+            const loginForm = document.getElementById('loginForm');
+            const adminPasswordInput = document.getElementById('adminPassword');
+            const loginMessage = document.getElementById('loginMessage');
+            const backToMainSiteBtn = document.getElementById('backToMainSiteBtn');
+
+            const addAnnouncementForm = document.getElementById('addAnnouncementForm');
+            const announcementsList = document.getElementById('announcementsList');
+            const announcementCountSpan = document.getElementById('announcementCount');
+
+            const addEventForm = document.getElementById('addEventForm');
+            const eventsList = document.getElementById('eventsList');
+            const eventCountSpan = document.getElementById('eventCount');
+
+            const addBSRForm = document.getElementById('addBSRForm');
+            const bsrList = document.getElementById('bsrList');
+            const bsrCountSpan = document.getElementById('bsrCount');
+
+            const communityMemberCountSpan = document.getElementById('communityMemberCount'); // For static count
+
+            const contactAdminForm = document.getElementById('contactAdminForm');
+            const adminMessagesList = document.getElementById('adminMessagesList'); // New: Admin Messages List
+            const adminMessageCountSpan = document.getElementById('adminMessageCount'); // New: Admin Message Count
+
+            const backToTopBtn = document.getElementById('backToTopBtn');
+            const themeToggleBtn = document.getElementById('themeToggle');
+            const htmlElement = document.documentElement;
+            const sunIcon = document.getElementById('sunIcon');
+            const moonIcon = document.getElementById('moonIcon');
+            const toastNotification = document.getElementById('toast-notification');
+
+            const confirmModal = document.getElementById('confirmModal');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+            // Select all main content sections (including hero and footer)
+            const heroSection = document.getElementById('heroSection');
+            const mainFooter = document.getElementById('mainFooter');
+            const mainContentSections = document.querySelectorAll(
+                '#announcements, #events, #buy-sell-rent, #community-gallery, #contacts, #community-guidelines, #contact-admin'
+            );
+            const globalBackground = document.getElementById('global-background');
+
+            // Search functionality elements
+            const searchInput = document.getElementById('searchInput');
+            const searchableSections = [
+                { id: 'announcements', list: announcementsList, itemClass: 'announcement-item' },
+                { id: 'events', list: eventsList, itemClass: 'event-item' },
+                { id: 'buy-sell-rent', list: bsrList, itemClass: 'bsr-item' }
+            ];
+
+
+            // Hardcoded password for demonstration.
+            const ADMIN_PASSWORD = "admin123";
+            let isLoggedIn = false; // Track login state
+            let itemToDelete = null; // Store reference to the item being deleted
+
+            // --- particles.js initialization ---
+            // This configuration creates a subtle, floating particles effect
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#ffffff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        },
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 3,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+
+
+            // --- Toast Notification Function ---
+            const showToast = (message, type = 'success') => {
+                toastNotification.textContent = message;
+                toastNotification.className = `show ${type}`; // Add 'show' and type class
+                toastNotification.classList.remove('hidden'); // Ensure it's visible
+
+                setTimeout(() => {
+                    toastNotification.classList.remove('show');
+                    toastNotification.classList.add('hidden');
+                }, 3000); // Hide after 3 seconds
+            };
+
+            // --- Theme Toggle Functionality ---
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) {
+                htmlElement.classList.add(currentTheme);
+            } else {
+                htmlElement.classList.add('light'); // Default to light if no preference
+            }
+
+            // Set initial icon visibility based on current theme
+            if (htmlElement.classList.contains('dark')) {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'inline-block';
+            } else {
+                sunIcon.style.display = 'inline-block';
+                moonIcon.style.display = 'none';
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                if (htmlElement.classList.contains('light')) {
+                    htmlElement.classList.remove('light');
+                    htmlElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'inline-block';
+                    globalBackground.style.backgroundImage = `url('https://placehold.co/1920x1080/1a202c/ffffff')`;
+                } else {
+                    htmlElement.classList.remove('dark');
+                    htmlElement.classList.add('light');
+                    localStorage.setItem('theme', 'light');
+                    sunIcon.style.display = 'inline-block';
+                    moonIcon.style.display = 'none';
+                    globalBackground.style.backgroundImage = `url('https://placehold.co/1920x1080/4f46e5/ffffff')`;
+                }
+            });
+
+            // Function to update counts
+            const updateCounts = () => {
+                announcementCountSpan.textContent = announcementsList.children.length;
+                eventCountSpan.textContent = eventsList.children.length;
+                bsrCountSpan.textContent = bsrList.children.length;
+                adminMessageCountSpan.textContent = adminMessagesList.children.length; // New: Update admin message count
+                // communityMemberCountSpan is static for this demo, no dynamic update needed
+            };
+
+            // --- Delete Button Visibility Toggle ---
+            const toggleDeleteButtons = (show) => {
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    if (show) {
+                        button.classList.remove('hidden');
+                    } else {
+                        button.classList.add('hidden');
+                    }
+                });
+            };
+
+            // --- Delete Confirmation Modal Logic ---
+            const showConfirmModal = (itemElement) => {
+                itemToDelete = itemElement;
+                confirmModal.classList.add('show');
+            };
+
+            const hideConfirmModal = () => {
+                confirmModal.classList.remove('show');
+                itemToDelete = null;
+            };
+
+            cancelDeleteBtn.addEventListener('click', hideConfirmModal);
+
+            confirmDeleteBtn.addEventListener('click', () => {
+                if (itemToDelete) {
+                    itemToDelete.remove();
+                    updateCounts();
+                    showToast('Item deleted successfully!', 'success');
+                }
+                hideConfirmModal();
+            });
+
+            // --- Attach Delete Listeners to existing items (on load) ---
+            const attachDeleteListeners = (listElement, itemClass) => {
+                listElement.querySelectorAll(`.${itemClass} .delete-btn`).forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const itemElement = e.target.closest(`.${itemClass}`);
+                        showConfirmModal(itemElement);
+                    });
+                });
+            };
+
+            // --- Scroll Reveal Animation ---
+            const scrollRevealSections = document.querySelectorAll('.scroll-reveal');
+            const observerOptions = {
+                root: null, /* viewport */
+                rootMargin: '0px',
+                threshold: 0.1 /* 10% of element visible */
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // Stop observing once visible
+                    }
+                });
+            }, observerOptions);
+
+            scrollRevealSections.forEach(section => {
+                observer.observe(section);
+            });
+
+
+            // Initial setup on DOMContentLoaded
+            updateCounts();
+            attachDeleteListeners(announcementsList, 'announcement-item');
+            attachDeleteListeners(eventsList, 'event-item');
+            attachDeleteListeners(bsrList, 'bsr-item');
+            attachDeleteListeners(adminMessagesList, 'admin-message-item'); // New: Attach listeners for admin messages
+
+
+            // --- Admin Panel Toggle ---
+            adminToggleBtn.addEventListener('click', () => {
+                adminPanel.classList.toggle('hidden');
+                if (!adminPanel.classList.contains('hidden')) {
+                    // Admin panel is opening
+                    heroSection.classList.add('display-none'); // Use display-none to fully hide
+                    mainFooter.classList.add('display-none'); // Use display-none to fully hide
+                    mainContentSections.forEach(section => section.classList.add('display-none')); // Use display-none to fully hide
+                    searchInput.classList.add('hidden'); // Hide search bar when admin panel is open
+                    if (isLoggedIn) {
+                        adminLoginForm.classList.add('hidden');
+                        adminContent.classList.remove('hidden');
+                        toggleDeleteButtons(true); // Show delete buttons when admin logs in
+                    } else {
+                        adminLoginForm.classList.remove('hidden');
+                        adminContent.classList.add('hidden');
+                        loginMessage.textContent = '';
+                        adminPasswordInput.value = '';
+                    }
+                    setTimeout(() => {
+                        adminPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                } else {
+                    // Admin panel is closing
+                    isLoggedIn = false; // Log out when panel is hidden
+                    adminLoginForm.classList.remove('hidden');
+                    adminContent.classList.add('hidden');
+                    toggleDeleteButtons(false); // Hide delete buttons when admin logs out
+                    heroSection.classList.remove('display-none'); // Show hero section
+                    mainFooter.classList.remove('display-none'); // Show footer
+                    mainContentSections.forEach(section => section.classList.remove('display-none')); // Show other main content
+                    searchInput.classList.remove('hidden'); // Show search bar when admin panel is closed
+                }
+            });
+
+            // --- Admin Login Form Submission ---
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const enteredPassword = adminPasswordInput.value;
+
+                if (enteredPassword === ADMIN_PASSWORD) {
+                    isLoggedIn = true;
+                    showToast('Login successful!', 'success');
+                    setTimeout(() => {
+                        adminLoginForm.classList.add('hidden');
+                        adminContent.classList.remove('hidden');
+                        toggleDeleteButtons(true); // Show delete buttons after successful login
+                    }, 800);
+                } else {
+                    isLoggedIn = false;
+                    showToast('Incorrect password. Please try again.', 'error');
+                    adminPasswordInput.value = '';
+                }
+            });
+
+            // --- Back to Main Site Button Functionality ---
+            backToMainSiteBtn.addEventListener('click', () => {
+                adminPanel.classList.add('hidden');
+                isLoggedIn = false; // Log out when going back to main site
+                adminLoginForm.classList.remove('hidden');
+                adminContent.classList.add('hidden');
+                toggleDeleteButtons(false); // Hide delete buttons when going back to main site
+                heroSection.classList.remove('display-none'); // Show hero section
+                mainFooter.classList.remove('display-none'); // Show footer
+                mainContentSections.forEach(section => section.classList.remove('display-none')); // Show other main content
+                searchInput.classList.remove('hidden'); // Show search bar when admin panel is closed
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+
+            // --- Add Announcement Functionality ---
+            addAnnouncementForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const title = document.getElementById('announcementTitle').value;
+                const content = document.getElementById('announcementContent').value;
+                const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+                const newAnnouncement = document.createElement('div');
+                newAnnouncement.className = 'announcement-item bg-indigo-50 dark:bg-gray-700 p-6 rounded-xl shadow-md border border-indigo-100 dark:border-gray-600 card-hover-effect border-l-4 border-indigo-500 relative';
+                newAnnouncement.innerHTML = `
+                    <h3 class="text-2xl font-bold text-indigo-700 dark:text-indigo-300 mb-3">${title}</h3>
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">${content}</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm text-right font-medium">Posted: ${date}</p>
+                    <button class="delete-btn absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full ${isLoggedIn ? '' : 'hidden'}" title="Delete Announcement">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-2 3a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                    </button>
+                `;
+                announcementsList.prepend(newAnnouncement);
+                // Attach delete listener to the newly created button
+                newAnnouncement.querySelector('.delete-btn').addEventListener('click', (e) => {
+                    showConfirmModal(newAnnouncement);
+                });
+
+                addAnnouncementForm.reset();
+                updateCounts();
+                showToast('Announcement posted successfully!', 'success');
+                newAnnouncement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+
+            // --- Add Event Functionality ---
+            addEventForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const title = document.getElementById('eventTitle').value;
+                const date = document.getElementById('eventDate').value;
+                const time = document.getElementById('eventTime').value;
+                const location = document.getElementById('eventLocation').value;
+                const description = document.getElementById('eventDescription').value;
+
+                const newEvent = document.createElement('div');
+                newEvent.className = 'event-item bg-purple-50 dark:bg-gray-700 p-6 rounded-xl shadow-md border border-purple-100 dark:border-gray-600 card-hover-effect border-l-4 border-purple-500 relative';
+                newEvent.innerHTML = `
+                    <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-3">${title}</h3>
+                    <p class="text-gray-700 dark:text-gray-300 text-base mb-2"><strong class="font-semibold">Date:</strong> ${date}</p>
+                    <p class="text-gray-700 dark:text-gray-300 text-base mb-2"><strong class="font-semibold">Time:</strong> ${time || 'N/A'}</p>
+                    <p class="text-gray-700 dark:text-gray-300 text-base mb-4"><strong class="font-semibold">Location:</strong> ${location}</p>
+                    ${description ? `<p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-3">${description}</p>` : ''}
+                    <button class="delete-btn absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full ${isLoggedIn ? '' : 'hidden'}" title="Delete Event">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-2 3a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                    </button>
+                `;
+
+                eventsList.prepend(newEvent);
+                // Attach delete listener to the newly created button
+                newEvent.querySelector('.delete-btn').addEventListener('click', (e) => {
+                    showConfirmModal(newEvent);
+                });
+
+                addEventForm.reset();
+                updateCounts();
+                showToast('Event added successfully!', 'success');
+                newEvent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+
+            // --- Add Buy/Sell/Rent Functionality ---
+            addBSRForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const type = document.getElementById('bsrType').value;
+                const item = document.getElementById('bsrItem').value;
+                const description = document.getElementById('bsrDescription').value;
+                const imageUrl = document.getElementById('bsrImageUrl').value; // Get the image URL
+                const contact = document.getElementById('bsrContact').value;
+
+                // Fallback image if no URL is provided or if it's invalid
+                const finalImageUrl = imageUrl && isValidUrl(imageUrl) ? imageUrl : 'https://placehold.co/128x128/e0f2f7/065f46';
+
+                // Basic phone number detection for linking
+                const phoneRegex = /(\d{3}[-.\s]?\d{3}[-.\s]?\d{4})|(\+\d{1,3}\s?\d{1,14})/;
+                const emailRegex = /[\w.-]+@([\w-]+\.)+[\w-]{2,4}/;
+
+                let formattedContact = contact;
+                if (phoneRegex.test(contact)) {
+                    const phoneNumber = contact.match(phoneRegex)[0].replace(/[^\d+]/g, '');
+                    formattedContact = `<a href="tel:${phoneNumber}" class="text-emerald-600 hover:underline dark:text-emerald-400">${contact}</a>`;
+                } else if (emailRegex.test(contact)) {
+                    formattedContact = `<a href="mailto:${contact}" class="text-emerald-600 hover:underline dark:text-emerald-400">${contact}</a>`;
+                }
+
+
+                const newBSRPost = document.createElement('div');
+                newBSRPost.className = 'bsr-item bg-emerald-50 dark:bg-gray-700 p-6 rounded-xl shadow-md border border-emerald-100 dark:border-gray-600 card-hover-effect border-l-4 border-emerald-500 relative';
+                newBSRPost.innerHTML = `
+                    <div class="flex items-center justify-center h-32 bg-emerald-100 dark:bg-gray-600 rounded-lg mb-4 text-emerald-600 dark:text-emerald-300 text-6xl">
+                        <img src="${finalImageUrl}" alt="${type} Item" class="w-full h-full object-cover rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/128x128/e0f2f7/065f46';">
+                    </div>
+                    <h3 class="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mb-3">${type}: ${item}</h3>
+                    <p class="text-gray-700 dark:text-gray-300 text-base mb-2"><strong class="font-semibold">Type:</strong> ${type}</p>
+                    <p class="text-gray-700 dark:text-gray-300 text-base mb-4"><strong>Item:</strong> ${item}</p>
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-3">${description}</p>
+                    <p class="text-gray-700 dark:text-gray-300 text-base mt-4"><strong class="font-semibold">Contact:</strong> ${formattedContact}</p>
+                    <button class="delete-btn absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full ${isLoggedIn ? '' : 'hidden'}" title="Delete Listing">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-2 3a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                    </button>
+                `;
+
+                bsrList.prepend(newBSRPost);
+                // Attach delete listener to the newly created button
+                newBSRPost.querySelector('.delete-btn').addEventListener('click', (e) => {
+                    showConfirmModal(newBSRPost);
+                });
+
+                addBSRForm.reset();
+                updateCounts();
+                showToast('Marketplace item posted successfully!', 'success');
+                newBSRPost.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+
+            // Helper function to validate URL
+            function isValidUrl(string) {
+                try {
+                    new URL(string);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            // --- Contact Admin Form Functionality ---
+            contactAdminForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('contactName').value;
+                const email = document.getElementById('contactEmail').value;
+                const subject = document.getElementById('contactSubject').value;
+                const message = document.getElementById('contactMessage').value;
+                const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+                const newAdminMessage = document.createElement('div');
+                newAdminMessage.className = 'admin-message-item bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600 relative';
+                newAdminMessage.innerHTML = `
+                    <p class="font-semibold text-gray-800 dark:text-gray-200">From: ${name} &lt;${email}&gt;</p>
+                    <p class="text-gray-700 dark:text-gray-300 text-sm">Subject: ${subject}</p>
+                    <p class="text-gray-600 dark:text-gray-400 mt-2">${message}</p>
+                    <p class="text-gray-500 dark:text-gray-500 text-xs text-right mt-2">Received: ${date}</p>
+                    <button class="delete-btn absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full ${isLoggedIn ? '' : 'hidden'}" title="Delete Message">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm-2 3a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                    </button>
+                `;
+
+                adminMessagesList.prepend(newAdminMessage); // Add to the admin messages list
+                newAdminMessage.querySelector('.delete-btn').addEventListener('click', (e) => {
+                    showConfirmModal(newAdminMessage);
+                });
+
+                contactAdminForm.reset();
+                updateCounts(); // Update counts to reflect the new message
+                showToast('Message sent successfully! We will get back to you soon.', 'success');
+                // No scrollIntoView here as it's for the admin panel
+            });
+
+
+            // --- Back to Top Button Functionality ---
+            window.onscroll = function() {
+                // Only show/hide back to top if admin panel is NOT open
+                if (adminPanel.classList.contains('hidden')) {
+                    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                        backToTopBtn.style.display = "block";
+                    } else {
+                        backToTopBtn.style.display = "none";
+                    }
+                } else {
+                    backToTopBtn.style.display = "none"; // Always hide when admin panel is open
+                }
+            };
+
+            backToTopBtn.addEventListener('click', () => {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            });
+
+            // --- Search Functionality ---
+            searchInput.addEventListener('input', () => {
+                const searchTerm = searchInput.value.toLowerCase(); // Get search term and convert to lowercase
+
+                searchableSections.forEach(section => {
+                    const items = section.list.querySelectorAll(`.${section.itemClass}`);
+                    items.forEach(item => {
+                        const itemText = item.textContent.toLowerCase(); // Get all text content of the item
+                        if (itemText.includes(searchTerm)) {
+                            item.style.display = ''; // Show the item
+                        } else {
+                            item.style.display = 'none'; // Hide the item
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+<!-- Firebase Feedback Handling -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { 
+    getFirestore, collection, addDoc, getDocs, doc, deleteDoc, serverTimestamp 
+  } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXPTXs4lCGmvvqgodR7qKdZ0gU2d7IDOg",
+    authDomain: "login-form-cf809.firebaseapp.com",
+    projectId: "login-form-cf809",
+    storageBucket: "login-form-cf809.appspot.com",
+    messagingSenderId: "439159256691",
+    appId: "1:439159256691:web:27a7f738b0d69cece2dc06"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore();
+
+  // ========================
+  // 1. FEEDBACK FORM
+  // ========================
+  document.getElementById('contactAdminForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      await addDoc(collection(db, "feedback"), {
+        name: document.getElementById('contactName').value,
+        email: document.getElementById('contactEmail').value,
+        message: document.getElementById('contactMessage').value,
+        timestamp: serverTimestamp()
+      });
+      alert("Feedback submitted!");
+      e.target.reset();
+    } catch (error) {
+      console.error("Feedback error:", error);
+      alert("Error submitting feedback");
+    }
+  });
+
+  // ========================
+  // 2. ANNOUNCEMENTS
+  // ========================
+  async function loadAnnouncements() {
+    try {
+      const snapshot = await getDocs(collection(db, "announcements"));
+      const list = document.getElementById('announcementsList');
+      list.innerHTML = '';
+      
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        list.innerHTML += `
+          <div class="announcement-item" data-doc-id="${doc.id}">
+            <h3>${data.title}</h3>
+            <p>${data.content}</p>
+            <small>${data.timestamp?.toDate()?.toLocaleString() || ''}</small>
+          </div>
+        `;
+      });
+    } catch (error) {
+      console.error("Load announcements error:", error);
+    }
+  }
+
+  document.getElementById('addAnnouncementForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      await addDoc(collection(db, "announcements"), {
+        title: document.getElementById('announcementTitle').value,
+        content: document.getElementById('announcementContent').value,
+        timestamp: serverTimestamp()
+      });
+      await loadAnnouncements();
+      e.target.reset();
+    } catch (error) {
+      console.error("Add announcement error:", error);
+    }
+  });
+
+  // ========================
+  // 3. EVENTS
+  // ========================
+  async function loadEvents() {
+    try {
+      const snapshot = await getDocs(collection(db, "events"));
+      const list = document.getElementById('eventsList');
+      list.innerHTML = '';
+      
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        list.innerHTML += `
+          <div class="event-item" data-doc-id="${doc.id}">
+            <h4>${data.name}</h4>
+            <p>${data.date} at ${data.location}</p>
+          </div>
+        `;
+      });
+    } catch (error) {
+      console.error("Load events error:", error);
+    }
+  }
+
+  document.getElementById('addEventForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      await addDoc(collection(db, "events"), {
+        name: document.getElementById('eventTitle').value,
+        date: document.getElementById('eventDate').value,
+        location: document.getElementById('eventLocation').value,
+        timestamp: serverTimestamp()
+      });
+      await loadEvents();
+      e.target.reset();
+    } catch (error) {
+      console.error("Add event error:", error);
+    }
+  });
+
+  // ========================
+  // 4. MARKETPLACE
+  // ========================
+  async function loadMarketplace() {
+    try {
+      const snapshot = await getDocs(collection(db, "marketplace"));
+      const list = document.getElementById('bsrList');
+      list.innerHTML = '';
+      
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        list.innerHTML += `
+          <div class="bsr-item" data-doc-id="${doc.id}">
+            <img src="${data.imageUrl || 'https://placehold.co/600x400'}">
+            <h4>${data.type}: ${data.item}</h4>
+            <p>${data.description}</p>
+            <p>Contact: ${data.contact}</p>
+          </div>
+        `;
+      });
+    } catch (error) {
+      console.error("Load marketplace error:", error);
+    }
+  }
+
+  document.getElementById('addBSRForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      await addDoc(collection(db, "marketplace"), {
+        type: document.getElementById('bsrType').value,
+        item: document.getElementById('bsrItem').value,
+        description: document.getElementById('bsrDescription').value,
+        contact: document.getElementById('bsrContact').value,
+        imageUrl: document.getElementById('bsrImageUrl').value || '',
+        timestamp: serverTimestamp()
+      });
+      await loadMarketplace();
+      e.target.reset();
+    } catch (error) {
+      console.error("Add marketplace error:", error);
+    }
+  });
+
+  // ========================
+  // 5. ADMIN INITIALIZATION
+  // ========================
+  document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (document.getElementById('adminPassword').value === "admin123") {
+      await loadAnnouncements();
+      await loadEvents();
+      await loadMarketplace();
+      alert("Admin login successful");
+    }
+  });
+
+  // ========================
+  // 6. DELETE FUNCTIONALITY
+  // ========================
+  document.addEventListener('click', async (e) => {
+    if (e.target.classList.contains('delete-btn')) {
+      const item = e.target.closest('[data-doc-id]');
+      const collectionName = item.classList.contains('announcement-item') ? 'announcements' :
+                           item.classList.contains('event-item') ? 'events' : 'marketplace';
+      
+      try {
+        await deleteDoc(doc(db, collectionName, item.dataset.docId));
+        item.remove();
+      } catch (error) {
+        console.error("Delete error:", error);
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
